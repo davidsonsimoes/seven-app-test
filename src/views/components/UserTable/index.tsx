@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
@@ -20,6 +19,9 @@ import { getUsers } from '../../../application/selectors/users';
 import { pageLoaded } from '../../../application/actions/ui';
 import { getLoading } from '../../../application/selectors/ui';
 import { UserEntityType } from '../../../application/entities/UserEntityType';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -105,6 +107,13 @@ export default function CustomPaginationActionsTable() {
   const dispatch = useDispatch();
   const users = useSelector(getUsers);
   const loading = useSelector(getLoading);
+  const [nameSearched, setNameSearched] = useState('');
+  const [ageSearched, setAgeSearched] = useState('');
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    setUserList(users);
+  }, [users]);
 
   useEffect(() => {
     dispatch(pageLoaded);
@@ -114,7 +123,7 @@ export default function CustomPaginationActionsTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -130,13 +139,68 @@ export default function CustomPaginationActionsTable() {
     setPage(0);
   };
 
+  const onChangeName = (value: string) => {
+    setNameSearched(value);
+    let usersFiltered = [];
+    if (value.length <= 0) {
+      setUserList(users);
+    } else {
+      usersFiltered = users.filter(({ name = '' }: UserEntityType) =>
+        name.toLowerCase().includes(nameSearched.toLowerCase())
+      );
+      setUserList(usersFiltered);
+    }
+  };
+
+  const onChangeAge = (value: string) => {
+    setAgeSearched(value);
+    let usersFiltered: any = [];
+    if (value.length <= 0 || value === '') {
+      setTimeout(() => {
+        setUserList(users);
+      }, 500);
+    } else {
+      usersFiltered = users.filter(({ age }: UserEntityType) => age === +value);
+
+      setTimeout(() => {
+        setUserList(usersFiltered);
+      }, 500);
+    }
+  };
+
   return (
     <>
-      <h1>Essential users</h1>
+      <h1>Essential userList</h1>
       {loading ? (
-        'Loading users...'
+        'Loading userList...'
       ) : (
         <>
+          <Grid container spacing={2}>
+            <Grid item xs={4} alignItems="flex-end">
+              <p style={{ display: 'block', textAlign: 'right' }}>
+                Filtrar por:
+              </p>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                id="outlined-name"
+                label="Nome"
+                size="small"
+                onChange={(evt) => onChangeName(evt.target.value)}
+                value={nameSearched}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                id="outlined-uncontrolled"
+                label="Idade"
+                size="small"
+                onChange={(evt) => onChangeAge(evt.target.value)}
+                value={ageSearched}
+              />
+            </Grid>
+          </Grid>
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
               <TableHead>
@@ -147,11 +211,11 @@ export default function CustomPaginationActionsTable() {
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
-                  ? users.slice(
+                  ? userList.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : users
+                  : userList
                 ).map((row: UserEntityType) => (
                   <TableRow key={row.name}>
                     <TableCell component="th" scope="row">
@@ -178,7 +242,7 @@ export default function CustomPaginationActionsTable() {
                       { label: 'All', value: -1 }
                     ]}
                     colSpan={3}
-                    count={users.length}
+                    count={userList.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{

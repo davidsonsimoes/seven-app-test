@@ -1,4 +1,4 @@
 export type UserEntityType = {
-  name?: string;
+  name?: string | undefined;
   age?: number;
 };
