@@ -1,12 +1,11 @@
-import React from 'react';
-
+import Container from '@mui/material/Container';
 import UsersPage from './components/UsersPage';
 
 function App() {
   return (
-    <div className="App">
+    <Container maxWidth="sm">
       <UsersPage />
-    </div>
+    </Container>
   );
 }
 
