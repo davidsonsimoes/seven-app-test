@@ -22,6 +22,7 @@ import { UserEntityType } from '../../../application/entities/UserEntityType';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import SkeletonUserTable from './skeleton';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -170,9 +171,10 @@ export default function CustomPaginationActionsTable() {
 
   return (
     <>
-      <h1>Essential userList</h1>
+      <h1>Lista de Usuários</h1>
+
       {loading ? (
-        'Loading userList...'
+        <SkeletonUserTable />
       ) : (
         <>
           <Grid container spacing={2}>

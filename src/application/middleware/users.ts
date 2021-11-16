@@ -5,6 +5,7 @@ import {
   PUT_USER,
   setUsers
 } from '../actions/users';
+import { UserEntityType } from '../../application/entities/UserEntityType';
 import * as uiActions from '../actions/ui';
 
 const loadUsersFlow =
@@ -32,17 +33,19 @@ const putUsersFlow =
   (next: any) =>
   (action: any) => {
     if (action.type === PUT_USER) {
-      const oldUsersClone = getState().users.allUsers.map((todo: any) => ({
-        ...todo
-      }));
-
-      const newTodo = action.payload;
-
-      const index = oldUsersClone.findIndex(
-        (todo: any) => todo.id === newTodo.id
+      const oldUsersClone = getState().users.allUsers.map(
+        (user: UserEntityType) => ({
+          ...user
+        })
       );
 
-      oldUsersClone[index] = newTodo;
+      const newUser = action.payload;
+
+      const index = oldUsersClone.findIndex(
+        (user: any) => user.id === newUser.id
+      );
+
+      oldUsersClone[index] = newUser;
 
       dispatch(setUsers(oldUsersClone));
     }
