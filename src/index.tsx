@@ -5,14 +5,15 @@ import { configureStore } from './application/store';
 import services from './infrastructure/services';
 import App from './views';
 import reportWebVitals from './reportWebVitals';
+import { Wrapper, GlobalStyle } from './views/skin/base';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Wrapper>
+    <GlobalStyle />
     <Provider store={configureStore(services)}>
       <App />
     </Provider>
-    ,
-  </React.StrictMode>,
+  </Wrapper>,
   document.getElementById('root')
 );
 

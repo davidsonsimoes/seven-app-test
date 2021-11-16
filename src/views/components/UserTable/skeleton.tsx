@@ -7,29 +7,32 @@ import TableFooter from '@mui/material/TableFooter';
 import Skeleton from '@mui/material/Skeleton';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
 import Grid from '@mui/material/Grid';
+
+import { BoxHeader } from './style';
 
 export default function CustomPaginationActionsTable() {
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={4} alignItems="flex-end">
-          <p style={{ display: 'block', textAlign: 'right' }}>
-            <Skeleton
-              variant="text"
-              style={{ display: 'inline-block' }}
-              width={90}
-            />
-          </p>
+      <BoxHeader>
+        <Grid container spacing={2}>
+          <Grid item xs={4} alignItems="flex-end">
+            <p style={{ display: 'block', textAlign: 'right' }}>
+              <Skeleton
+                variant="text"
+                style={{ display: 'inline-block' }}
+                width={90}
+              />
+            </p>
+          </Grid>
+          <Grid item xs={4}>
+            <Skeleton variant="rectangular" width={170} height={40} />
+          </Grid>
+          <Grid item xs={4}>
+            <Skeleton variant="rectangular" width={170} height={40} />
+          </Grid>
         </Grid>
-        <Grid item xs={4}>
-          <Skeleton variant="rectangular" width={170} height={40} />
-        </Grid>
-        <Grid item xs={4}>
-          <Skeleton variant="rectangular" width={170} height={40} />
-        </Grid>
-      </Grid>
+      </BoxHeader>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
